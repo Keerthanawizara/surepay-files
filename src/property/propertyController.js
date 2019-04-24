@@ -29,102 +29,71 @@ const schema = Joi.object().keys({
 
 //create API initialize
 
-const propertyDetail = (req,h) => {
-    var data = req.payload
-       return new Promise((resolve, reject) => {
-        propertyCollection.create(req.payload,
-           Joi.validate(data, schema, (err,docs)=> {
-               if (err) 
-                 reject(err);
-               else resolve(docs);
-           }));
-       });
+const propertyDetail = async(req,h) => {
+  var data = req.payload
+  Joi.validate(data, schema,(err)=>{
+     return err
+  })
+ let docs = await propertyCollection.propertyDetail(data)
+ if(docs){
+    return docs
+}else{
+    return err
+ }   
 }
-
 
 
 // // property table List Page
 
-const propertyDataList = (request,h) => {
-    const propertyData = () => {
-        return new Promise((resolve,reject) => 
-            propertyCollection.paginate({}, { offset: 0, limit: 10},(err,docs) => {
-                if (err) {
-                reject(err)
-               // console.log(err)
-                 }else{
-                   resolve(docs)
-                 }
-            }))
+const propertyDataList = async(req,h) => {
+  let docs =  await propertyCollection.propertyDataList(req)
+     if(docs){
+         return docs
+     }else{
+         return err
+
+     }     
     }
-    return propertyData().then(res => res).catch(err => err)
+
+    const propertyRecord = async(req,h) => {
+      const query = req.query;
+    const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin}; 
+    let docs = await propertyCollection.propertyRecord(params)
+     if(docs){
+        return docs
+    }else{
+        return err
+    } 
+}      
+    
+// //     //update property details
+const propertyRecordUpdate = async(req,h) => {
+  const query = req.query;
+  const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};
+  let docs = await propertyCollection.propertyRecordUpdate(params)
+  if(docs){
+     return docs
+ }else{
+     return err
+ }   
 }
 
 
- //propertyDetail/{pin}
-const propertyRecord = (req,h) => {
-        const query= req.query;
-        console.log(query)
-     const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};
-     console.log(params)
-        return new Promise((resolve,reject) => {
-            propertyCollection.findOne(
-                params,
-                  ((err,docs) => {
-                    if(!err){
-                       resolve(docs)
-                    }else{
-                       reject(err)
-                    }
-                })); 
 
-        })
-    }
-    
-//     //update property details
+// // // delete property details
 
-    const propertyRecordUpdate = (req,h) => {
-      const query = req.query
-        const params = {_id: mongoose.Types.ObjectId(req.params.id), pin:query.pin};
-        console.log(params)
-        return new Promise((resolve,reject) => {
-            const update_data=(req.payload);
-            console.log(update_data)
-            propertyCollection.updateOne(params,{$set:update_data},((err,docs) => {
-                    if(!err){   
-                            resolve(docs)
-                        }else{
-                         reject(err)
-                        }
-                })); 
-    
-        })
-     }
-// // delete property details
-
-  const propertyRecordDelete = (req,h) => {
-    const query = req.query;
-  const params = {_id: mongoose.Types.ObjectId(req.params.id),pin: query.pin};
-  console.log(params)
-     return new Promise((resolve,reject) => {
-         propertyCollection.deleteOne(
-             params,(query,(err,docs) => {
-                 if(!err){  
-                      resolve(docs)
-                    }else{
-                        reject(err)
-                    }
-
-                })); 
-     })
-  }
-
-  
-
-
-
+ const propertyRecordDelete = async(req,h) => {
+  const query = req.query;
+  const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin}; 
+  let docs = await propertyCollection.propertyRecordDelete(params)
+  if(docs){
+     return docs
+ }else{
+     return err
+   } 
+}      
 module.exports = {
-     propertyDataList,
+    propertyDataList,
      propertyDetail,
      propertyRecord,
      propertyRecordUpdate,

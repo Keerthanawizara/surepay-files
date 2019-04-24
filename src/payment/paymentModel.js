@@ -1,22 +1,62 @@
-const mongoose = require('mongoose');
+const paymentSchema = require('./paymentSchema');
 
-var mongoosePaginate = require('mongoose-paginate');
-//get the Schema class
-const Schema = mongoose.Schema;
 
-const PaymentSchema = new Schema({
-    pin: {
-     required : true,
-     type : String
-    },
-      payment: {
-          required : true,
-          type : String
-      },
-      Date:{
-        type: Date, 
-        default: Date.now
-      }
-});
-PaymentSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('paymentList', PaymentSchema, 'paymentList');
+const createPayment = async(req) => {
+  let docs = await paymentSchema.create(req)
+  if(docs){
+    return docs
+  }else{
+    return err
+  }
+} 
+
+const paymentDataList =async()=>{
+  let docs = await paymentSchema.paginate({},{offset:0, limit:10})
+    if(docs) {
+      return docs;
+   }else {
+       return err;
+   }
+  } 
+
+  const paymentRecord = async(req)=> {
+    let docs = await paymentSchema.findOne(req)
+    if(docs) {
+      return docs;
+   }else {
+       return err;
+   }
+  }
+
+ const paymentRecordUpdate = async(req) => {
+  let docs = await paymentSchema.updateOne({ $set:req.payload })
+  if(docs) {
+    return docs;
+ }else {
+   //console.log(err)
+     return err;
+ }
+}
+
+const paymentRecordDelete = async(req) =>{
+  let docs = await paymentSchema.deleteOne(req)
+  if(docs) {
+    return docs;
+ }else {
+     return err;
+ }
+}
+
+
+
+
+
+
+
+module.exports = {
+  createPayment,
+  paymentDataList,
+  paymentRecord,
+  paymentRecordUpdate,
+  paymentRecordDelete
+}

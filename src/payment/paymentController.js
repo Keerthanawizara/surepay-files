@@ -9,95 +9,78 @@ const schema = Joi.object().keys({
    payment: Joi.string().required() 
 }).with('pin', 'payment');
 
-//create api with joi validation 
-const paymentDetail = (req,h) => {
-    var data = req.payload
-       return new Promise((resolve, reject) => {
-           paymentCollection.create(req.payload,
-           Joi.validate(data, schema, (err,docs)=> {
-               if (err) reject(err);
-               else resolve(docs);
-           }));
-       });
+
+const createPayment = async(req,h) => {
+     var data = req.payload
+     Joi.validate(data, schema,(err)=>{
+        return err
+     })
+    let docs = await paymentCollection.createPayment(data)
+   if(docs){
+       return docs
+   }else{
+       return err
+   }   
 }
-
         
-// payment table List Page
 
-const paymentDataList = (request,h) => {
-        return new Promise((resolve,reject) => 
-            paymentCollection.paginate({},{offset:0, limit:10},(err,docs) => {
-                if (!err) {
-               resolve(docs)
-                 }else{
-                   reject(err)
-                 }
-            }))
+const paymentDataList = async(req,h) => {
+     let docs =  await paymentCollection.paymentDataList(req)
+        if(docs){
+            return docs
+        }else{
+            return err
+   
+        }     
+       }
+
+       const paymentRecord = async(req,h) => {
+          const query = req.query;
+        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin}; 
+        let docs = await paymentCollection.paymentRecord(params)
+         if(docs){
+            return docs
+        }else{
+            return err
+        } 
+    }      
+    
+    
+    const paymentRecordUpdate = async(req,h) => {
+        const query = req.query;
+        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};
+        let docs = await paymentCollection.paymentRecordUpdate(params)
+        if(docs){
+           return docs
+       }else{
+           return err
+       }   
     }
 
-    //payment list based on ID and PIN
-
-    const paymentRecord = (req,h) => {
+    const paymentRecordDelete = async(req,h) => {
         const query = req.query;
-        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};  
-            return new Promise((resolve,reject) => {
-                paymentCollection.findOne(
-                    params,
-                    ((err,docs) => {
-                        if(!err){
-                           resolve(docs)
-                        }else{
-                          reject(err)
-                        }
-                    })); 
+        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin}; 
+        let docs = await paymentCollection.paymentRecordDelete(params)
+        if(docs){
+           return docs
+       }else{
+           return err
+       } 
+   }      
+   
     
-            })
-                
-        }
-
-    //update property details
-
-    const paymentRecordUpdate = (req,h) => {        
-        const query = req.query;
-        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};
-        const update_data=(req.payload)
-        return new Promise((resolve,reject) => {
-            paymentCollection.updateOne(
-                params,
-                { $set: update_data },((err,docs) => {
-                    if(!err){
-                            resolve(docs)
-                        }else{
-                            reject(err)
-                        }
-                })); 
-
-        })
-     }
-    // // delete property details
-
-  
-    const paymentRecordDelete = (req,h) => {
-        const query = req.query;
-        const params = {_id: mongoose.Types.ObjectId(req.params.id),pin:query.pin};
-         return new Promise((resolve,reject) => {
-             paymentCollection.deleteOne(
-                 params,((err,docs) => {
-                     if(!err){
-                           resolve(docs)
-                        }else{
-                          reject(err)
-                        }
-                    })); 
-         })
-        }
         
 
-        module.exports = {
-            paymentDetail,
-            paymentDataList,
-            paymentRecordUpdate,
-            paymentRecordDelete,
-            paymentRecord
 
+
+
+
+
+        module.exports = {
+            createPayment,
+            paymentDataList,
+            paymentRecord,
+            paymentRecordUpdate,
+            paymentRecordDelete
+           
         }

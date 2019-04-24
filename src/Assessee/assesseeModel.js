@@ -1,14 +1,57 @@
-const mongoose = require('mongoose');
+const assesseeSchema = require('./assesseeSchema');
 
-var mongoosePaginate = require('mongoose-paginate');
-//get the Schema class
-const Schema = mongoose.Schema;
+const assesseeDetail = async(req) => {
+    let docs = await assesseeSchema.create(req)
+    if(docs){
+      return docs
+    }else{
+      return err
+    }
+  } 
 
-const AssesseeSchema = new Schema({
-    name:String,
-    emailId:String,
-    phone:String,
-    propertyId:String 
-});
-AssesseeSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('assesseeList', AssesseeSchema, 'assesseeList');
+
+  const assesseeDataList =async()=>{
+    let docs = await assesseeSchema.paginate({},{offset:0, limit:10})
+      if(docs) {
+        return docs;
+     }else {
+         return err;
+     }
+    } 
+
+ const assesseeRecord = async(req)=> {
+        let docs = await assesseeSchema.findOne(req)
+        if(docs) {
+          return docs;
+       }else {
+           return err;
+       }
+      }
+
+      const assesseeRecordUpdate = async(req) => {
+        const update_data=({name:req.payload.name, emailId:req.payload.emailId, phone:req.payload.phone, propertyId:req.payload.propertyId})
+        let docs = await assesseeSchema.updateOne({$set:update_data},{multi:true})
+        if(docs) {
+          return docs;
+       }else {
+         //console.log(err)
+           return err;
+       }
+    }
+
+      const assesseeRecordDelete = async(req) =>{
+        let docs = await assesseeSchema.deleteOne(req)
+        if(docs) {
+          return docs;
+       }else {
+           return err;
+       }
+      }
+    
+  module.exports ={
+      assesseeDetail,
+      assesseeDataList,
+      assesseeRecord,
+      assesseeRecordUpdate,
+      assesseeRecordDelete
+  }

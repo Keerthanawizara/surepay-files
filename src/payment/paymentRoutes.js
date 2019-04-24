@@ -18,8 +18,8 @@ module.exports = [
         description: 'create payment List  for Surepay',
         auth: false
     },
-     path: '/paymentDetail', 
-     handler: paymentCtrl.paymentDetail},
+     path: '/createPayment', 
+     handler: paymentCtrl.createPayment},
     {
      method: 'GET', 
      config: {

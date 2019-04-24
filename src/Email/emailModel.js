@@ -1,11 +1,15 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const emailSchema = require('./emailSchema');
 
-const EmailSchema = new Schema({
-    from:String,
-    to:String,
-    subject:String,
-    Text:String
-   
-});
-module.exports = mongoose.model('emailList', EmailSchema, 'emailList');
+
+const sendEmail = async(req) => {
+    let docs = await emailSchema.create(req)
+    if(docs){
+      return docs
+    }else{
+      return err
+    }
+  } 
+
+  module.exports ={
+      sendEmail
+  }
