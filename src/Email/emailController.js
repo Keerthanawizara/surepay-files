@@ -14,12 +14,16 @@ const transporter = nodemailer.createTransport({
 
     const  sendEmail = async(req,h) => {
        var mailOptions= req.payload
-       let docs = await emailCollection.sendEmail()
-       transporter.sendMail(mailOptions,(err))
+       transporter.sendMail(mailOptions,(info,err)=>{
+        if(info){
+          return info
+        }else{
+          return err
+        }
+      })
+       let docs = await emailCollection.sendEmail(mailOptions);
        if(docs){
-           return docs
-       }else{
-           return err
-       }   
+         return docs
+       }
     }
 module.exports = sendEmail

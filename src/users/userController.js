@@ -13,34 +13,35 @@ const schema = Joi.object().keys({
 
 
 //create user API
-const createUser = (req,h) => {
-     var data = req.payload
-        return new Promise((resolve, reject) => {
-            userCollection.create(req.payload,
-            Joi.validate(data, schema, (err,docs)=> {
-                if (err) reject(err);
-                else resolve(docs);
-            }));
-        });
-}
-//GetUserList
-const GetUserList = (request,h) => {
-    return new Promise((resolve,reject) => {
-        userCollection.paginate({},{offset:0, limit:15},(err,docs) => {
-            if (err) {
-           reject(err)
-           //console.log(err)
-             }else{
-               resolve(docs)
-             }
-        })
+const createUser = async(req,h) => {
+    var data = req.payload
+    Joi.validate(data, schema,(err)=>{
+       return err
     })
+   let docs = await userCollection.createUser(data)
+  if(docs){
+      return docs
+  }else{
+      return err
+  }   
 }
+       
+//GetUserList
+const getUserList = async(req,h) => {
+    let docs =  await userCollection.getUserList(req)
+       if(docs){
+           return docs
+       }else{
+           return err
+  
+       }     
+      }
+
 
 const userAuthController = async (request) => {
     const userCredentials = request.payload
         if (userCredentials && (userCredentials.username && userCredentials.password)) {
-            const userData = await userCollection.find({...userCredentials}).then(doc => doc).catch(e => e)
+            const userData = await userCollection.userAuthController(userCredentials)
             if (userData[0]._id) {
                 const userAuth = new userAuthentication(userData[0]._id)
                 return {
@@ -60,5 +61,5 @@ const userAuthController = async (request) => {
 module.exports = {
     createUser,
     userAuthController,
-    GetUserList
+    getUserList
 }

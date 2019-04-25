@@ -31,5 +31,5 @@ module.exports = [
   },
    path: '/countyRecordUpdate/{id}', 
    handler: CountyCtrl. countyRecordUpdate
-},
-]
+}
+];

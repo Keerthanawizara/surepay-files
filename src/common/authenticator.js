@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const userCollection = require('../users/userModel')
+const userSchema = require('../users/userSchema')
 
 
 class userAuthentication {
@@ -14,7 +14,7 @@ class userAuthentication {
         try {
             const verifiedToken = jwt.verify(token, 'My secret Key')
             if (verifiedToken.userId) {
-                const userData = await userCollection.findById({_id: verifiedToken.userId}).then(doc => doc).catch(e => e)
+                const userData = await userSchema.findById({_id: verifiedToken.userId}).then(doc => doc).catch(e => e)
                 if (userData._id) {
                     return true
                 } else {

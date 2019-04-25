@@ -1,18 +1,37 @@
 
-const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
+const userSchema = require('./userSchema')
 
-const Schema = mongoose.Schema;
-
-const userSchema = new Schema({
-    username: {
-        required : true,
-        type : String
-    },
-    password: {
-        required : true,
-        type : String
+const createUser = async(req) => {
+    let docs = await userSchema.create(req)
+    if(docs){
+      return docs
+    }else{
+      return err
     }
-});
-userSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('userList', userSchema, 'userList');
+  } 
+
+  const getUserList =async()=>{
+    let docs = await userSchema.paginate({},{offset:0, limit:10})
+      if(docs) {
+        return docs;
+     }else {
+         return err;
+     }
+    } 
+
+
+    const userAuthController = async(req)=> {
+        let docs = await userSchema.find(req)
+        if(docs) {
+          return docs;
+       }else {
+           return err;
+       }
+      }
+
+
+  module.exports ={
+      createUser,
+      getUserList,
+      userAuthController
+  }

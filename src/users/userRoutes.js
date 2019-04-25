@@ -26,5 +26,5 @@ module.exports = [{
         description: 'Get list for users'
     },
     path: '/getUserList',
-    handler:Controller.GetUserList
+    handler:Controller.getUserList
 }];
