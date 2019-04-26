@@ -41,7 +41,7 @@ const getUserList = async(req,h) => {
 const userAuthController = async (request) => {
     const userCredentials = request.payload
         if (userCredentials && (userCredentials.username && userCredentials.password)) {
-            const userData = await userCollection.userAuthController(userCredentials)
+            const userData = await userCollection.userAuthController(userCredentials).then(doc=>doc).catch(err=>err)
             if (userData[0]._id) {
                 const userAuth = new userAuthentication(userData[0]._id)
                 return {
