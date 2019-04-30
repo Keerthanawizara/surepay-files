@@ -17,8 +17,10 @@ const transporter = nodemailer.createTransport({
        transporter.sendMail(mailOptions,(info,err)=>{
         if(info){
           return info
+       //  console.log(info)
         }else{
           return err
+          //console.log(err)
         }
       })
        let docs = await emailCollection.sendEmail(mailOptions);

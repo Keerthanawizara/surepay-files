@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "csv": "^5.1.1",
     "csv-parser": "^2.2.0",
     "dotenv": "^7.0.0",
@@ -17,6 +18,7 @@
     "fs": "0.0.1-security",
     "hapi": "^18.1.0",
     "hapi-auth-bearer-token": "^6.1.1",
+    "hapi-axios": "^1.0.0",
     "hapi-swagger": "^9.4.2",
     "hapi-swaggered": "^3.0.3",
     "hapi-swaggered-ui": "^2.6.2",

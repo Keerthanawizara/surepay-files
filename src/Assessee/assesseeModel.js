@@ -29,7 +29,7 @@ const assesseeDetail = async(req) => {
       }
 
       const assesseeRecordUpdate = async(req) => {
-        const update_data=({name:req.payload.name, emailId:req.payload.emailId, phone:req.payload.phone, propertyId:req.payload.propertyId})
+        const update_data=({name:req.name, emailId:req.emailId, phone:req.phone, propertyId:req.propertyId})
         let docs = await assesseeSchema.updateOne({$set:update_data},{multi:true})
         if(docs) {
           return docs;

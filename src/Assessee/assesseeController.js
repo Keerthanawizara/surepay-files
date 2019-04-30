@@ -30,7 +30,7 @@ const assesseeDetail = async(req,h) => {
 //  //assessee Data list Api
 
 const assesseeDataList = async(req,h) => {
-    let docs =  await assesseeCollection.assesseeDataList(req)
+  let docs =  await assesseeCollection.assesseeDataList(req)  
        if(docs){
            return docs
        }else{

@@ -2,7 +2,7 @@ const assesseeCtrl= require('./assesseeController');
 
 module.exports =
     [
-     {
+ {
      method: 'GET',
      config: {
         tags: ['api','Assessee details'],

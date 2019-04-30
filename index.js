@@ -1,4 +1,5 @@
 const hapi = require('hapi')
+const axios = require('axios');
 const AuthBearer = require('hapi-auth-bearer-token')
 const Inert = require('inert')
 const Vision = require('vision')
@@ -34,7 +35,7 @@ const init = async () => {
                 grouping: 'tags'
             }
         }
-    ])
+    ])   
     server.auth.strategy('simple', 'bearer-access-token', {
         allowMultipleHeaders: true,
         validate: async (request, token, h) => {
